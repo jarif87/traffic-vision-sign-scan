@@ -2,6 +2,8 @@
 
 A Flask-based web application for detecting traffic signs in real-time using a webcam or uploaded videos. The application leverages a YOLO model (`best.pt`) to identify traffic signs, such as "Stop," "Green Light," and various speed limits, with a modern, user-friendly interface featuring a YouTube-like video player. Built by Sadik Al Jarif.
 
+![Wbpage Screenshot](/images/image.png/)
+
 ## Features
 
 - **Real-Time Detection**: Detects traffic signs in live webcam feed with a toggleable on/off button.
