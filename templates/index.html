@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrafficSignAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>TrafficSignAI</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Webcam Feed Section -->
+        <div class="section webcam-section">
+            <h2>Real-Time Webcam Feed</h2>
+            <div class="button-group">
+                <button id="open-camera" onclick="openCamera()">Open Camera</button>
+                <button id="close-camera" onclick="closeCamera()" disabled>Close Camera</button>
+            </div>
+            <div class="video-container">
+                <img id="webcam-feed" alt="Webcam Feed" style="display: none;">
+                <div id="webcam-placeholder">Camera is off. Click "Open Camera" to start.</div>
+            </div>
+        </div>
+
+        <!-- Video Upload Section -->
+        <div class="section upload-section">
+            <h2>Upload Video for Detection</h2>
+            <div class="upload-group">
+                <input type="file" id="video-upload" accept="video/*">
+                <button onclick="uploadVideo()">Upload Video</button>
+            </div>
+            <div class="video-player">
+                <video id="uploaded-video" controls>
+                    <source id="video-source" src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div id="processed-feed"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 TrafficSignAI. Made by Sadik Al Jarif.</p>
+    </footer>
+
+    <script>
+        function openCamera() {
+            const webcamFeed = document.getElementById("webcam-feed");
+            const placeholder = document.getElementById("webcam-placeholder");
+            const openButton = document.getElementById("open-camera");
+            const closeButton = document.getElementById("close-camera");
+
+            webcamFeed.src = "{{ url_for('video_feed') }}";
+            webcamFeed.style.display = "block";
+            placeholder.style.display = "none";
+            openButton.disabled = true;
+            closeButton.disabled = false;
+        }
+
+        function closeCamera() {
+            const webcamFeed = document.getElementById("webcam-feed");
+            const placeholder = document.getElementById("webcam-placeholder");
+            const openButton = document.getElementById("open-camera");
+            const closeButton = document.getElementById("close-camera");
+
+            webcamFeed.src = "";
+            webcamFeed.style.display = "none";
+            placeholder.style.display = "block";
+            openButton.disabled = false;
+            closeButton.disabled = true;
+        }
+
+        function uploadVideo() {
+            const fileInput = document.getElementById("video-upload");
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a video file.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch("/upload", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    const videoPlayer = document.getElementById("uploaded-video");
+                    const processedFeed = document.getElementById("processed-feed");
+                    const videoSource = document.getElementById("video-source");
+                    videoSource.src = `/uploads/${data.filename}`;
+                    videoPlayer.load();
+                    processedFeed.innerHTML = `<img src="/process_video/${data.filename}" alt="Processed Video Feed">`;
+                }
+            })
+            .catch(error => {
+                console.error("Error uploading video:", error);
+                alert("Error uploading video.");
+            });
+        }
+    </script>
+</body>
+</html>

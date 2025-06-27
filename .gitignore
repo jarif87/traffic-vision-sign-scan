@@ -1,0 +1,63 @@
+# Python-specific
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+.Python
+env/
+venv/
+ENV/
+*.env
+*.venv
+
+# Flask-specific
+instance/
+*.log
+
+# Model and large files
+model/best.pt
+model/*.pt
+model/*.pth
+model/*.onnx
+
+# Uploads folder
+uploads/*
+!uploads/.gitkeep
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Virtual environment and dependencies
+pip-log.txt
+pip-selfcheck.json
+dist/
+build/
+*.egg-info/
+*.egg
+
+# Cache and temporary files
+*.cache
+*.swp
+*.swo
+*~
+
+# Testing and coverage
+.coverage
+coverage.xml
+*.cover
+*.pytest_cache/
+
+# Jupyter notebooks (if used)
+*.ipynb
+*.ipynb_checkpoints/
+
+# Miscellaneous
+*.bak
+*.tmp
